@@ -8,7 +8,8 @@ import (
 
 var (
 	inputExpression = flag.String("e", "", "Expression to compute")
-	// TODO: Add other flags support for input and output configuration.
+	inputFile = flag.String("f", "", "File with expression to compute")
+	outputFile = flag.String("o", "", "File for the result")
 )
 
 func main() {
