@@ -28,7 +28,7 @@ func checkInputText(text string) error {
   mathSymbols := []string{"+", "/", "*", "-", "^", "div", "%"}
   checker := 0
 
-  elements := strings.Split(Reverse(text), " ")
+  elements := strings.Split(text, " ")
   for index, elem := range elements {
     if checker < 0 {
       return errors.New("Error in input text")
