@@ -31,11 +31,15 @@ func checkInputText(text string) error {
   checker := 0
 
   elements := strings.Split(text, " ")
-  for _, elem := range elements {
+  for index, elem := range elements {
     if checker < 0 {
       return errors.New("Error in input text")
     } else if contains(mathSymbols, elem) {
-      checker += 2
+      if (index == 0) {
+        checker += 2
+      } else {
+        checker += 1
+      }
     } else if isInt(elem) {
       checker -= 1
     } else {
