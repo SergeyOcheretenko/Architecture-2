@@ -3,25 +3,56 @@ package main
 import (
 	"flag"
 	"fmt"
+	"strings"
+	"os"
+	"errors"
 	lab2 "github.com/roman-mazur/architecture-lab-2"
 )
 
 var (
 	inputExpression = flag.String("e", "", "Expression to compute")
-	// TODO: Add other flags support for input and output configuration.
+	inputFile = flag.String("f", "", "File with expression to compute")
+	outputFile = flag.String("o", "", "File for the result")
 )
+
+func catchErr(err error) {
+    fmt.Fprintln(os.Stderr, err)
+	os.Exit(1)
+}
+
+func checkErr(err error) {
+    if err != nil {
+		catchErr(err)
+    }
+}
 
 func main() {
 	flag.Parse()
 
-	// TODO: Change this to accept input from the command line arguments as described in the task and
-	//       output the results using the ComputeHandler instance.
-	//       handler := &lab2.ComputeHandler{
-	//           Input: {construct io.Reader according the command line parameters},
-	//           Output: {construct io.Writer according the command line parameters},
-	//       }
-	//       err := handler.Compute()
+	handler := &lab2.ComputeHandler{}
+	if *inputExpression != "" && *inputFile != "" {
+		catchErr(errors.New("There should be only one way to pass an expression"))
+	}
+	if *inputExpression != "" {
+		handler.Input = strings.NewReader(*inputExpression)
+	} else if *inputFile != "" {
+		file, err := os.Open(*inputFile)
+		checkErr(err)
+		defer file.Close()
+		handler.Input = file
+	} else {
+		catchErr(errors.New("Expression not passed"))
+	}
 
-	res, _ := lab2.PrefixToPostfix("+ 2 2")
-	fmt.Println(res)
+	if *outputFile != "" {
+		file, err := os.OpenFile(*outputFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		checkErr(err)
+		defer file.Close()
+		handler.Output = file
+	} else {
+		handler.Output = os.Stdout
+	} 
+
+	err := handler.Compute()
+	checkErr(err)
 }
