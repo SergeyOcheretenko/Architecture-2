@@ -10,7 +10,7 @@ import (
 func TestPrefixToPostfix(t *testing.T) {
 	res, err := PrefixToPostfix("+ 5 * - 4 2 3")
 	if assert.Nil(t, err) {
-		assert.Equal(t, "4 2 - 3 * 5 +", res)
+		assert.Equal(t, "3 2 4 - * 5 +", res)
 	}
 }
 
