@@ -53,6 +53,6 @@ func main() {
 		handler.Output = os.Stdout
 	} 
 
-	res, _ := lab2.PrefixToPostfix("+ 2 2")
-	fmt.Println(res)
+	err := handler.Compute()
+	checkErr(err)
 }
